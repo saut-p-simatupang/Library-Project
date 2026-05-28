@@ -1,12 +1,16 @@
 <!doctype html>
-<html>
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=yes, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover"
     />
-    <title>Perpustakaan Digital Desa Tambaksari</title>
+    <meta
+      name="description"
+      content="Perpustakaan Digital Desa Tambaksari - Koleksi buku gratis dalam format PDF. Baca online atau download."
+    />
+    <title>Perpustakaan Digital | Desa Tambaksari</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -21,216 +25,465 @@
         padding: 0;
         box-sizing: border-box;
       }
+
       body {
-        background: #020b1f;
+        background: #f8fafc;
         font-family: "Inter", sans-serif;
-        color: #f0f3fa;
+        color: #0f172a;
         scroll-behavior: smooth;
       }
+
+      /* Dark mode preferensi (opsional, tetap nyaman) */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #0f172a;
+          color: #e2e8f0;
+        }
+        .book-card {
+          background: #1e293b;
+        }
+        .search-wrapper,
+        .filter-select {
+          background: #1e293b;
+          border-color: #334155;
+          color: #e2e8f0;
+        }
+        .footer {
+          background: #0f172a;
+          border-top-color: #334155;
+        }
+        .category-chip {
+          background: #1e293b;
+          border-color: #334155;
+          color: #cbd5e1;
+        }
+        .category-chip.active {
+          background: #3b82f6;
+          color: white;
+          border-color: #3b82f6;
+        }
+        .stats-info {
+          color: #94a3b8;
+        }
+      }
+
       .container {
-        max-width: 1400px;
+        max-width: 1440px;
         margin: 0 auto;
         padding: 1.5rem 2rem;
       }
-      h1 {
-        margin-bottom: 1rem;
-        font-size: 1.8rem;
+
+      /* Header */
+      .header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 12px;
-      }
-      h1 i {
-        color: #f4a261;
-      }
-      .search-bar {
-        display: flex;
-        gap: 1rem;
-        margin: 2rem 0;
         flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .logo h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .logo p {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+      .back-link {
+        background: #f1f5f9;
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        text-decoration: none;
+        color: #1e293b;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .back-link:hover {
+        background: #e2e8f0;
+        transform: translateX(-3px);
+      }
+
+      /* Search & Filter Bar */
+      .search-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 1.5rem 0;
       }
       .search-wrapper {
         flex: 3;
         display: flex;
-        background: #07152f;
-        border-radius: 2rem;
+        align-items: center;
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 60px;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s;
+      }
+      .search-wrapper:focus-within {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
       }
       .search-wrapper i {
         padding: 0 1rem;
-        align-self: center;
-        color: #8e9cb0;
+        color: #94a3b8;
       }
       .search-wrapper input {
         flex: 1;
-        background: transparent;
         border: none;
-        padding: 0.8rem 1rem;
-        color: white;
+        padding: 0.9rem 0;
+        font-size: 0.95rem;
         outline: none;
+        background: transparent;
+        font-family: inherit;
+      }
+      .filter-select {
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 60px;
+        padding: 0 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #1e293b;
+        cursor: pointer;
         font-family: inherit;
       }
       .btn-primary {
-        background: #f4a261;
+        background: #3b82f6;
         border: none;
-        padding: 0.8rem 1.8rem;
-        border-radius: 2rem;
+        padding: 0 1.8rem;
+        border-radius: 60px;
         font-weight: 600;
-        color: #020b1f;
+        color: white;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.2s;
         font-family: inherit;
+        font-size: 0.9rem;
       }
       .btn-primary:hover {
-        background: #e76f51;
+        background: #2563eb;
+        transform: scale(1.02);
       }
+
+      /* Category chips */
+      .categories-wrapper {
+        margin: 1rem 0 1.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        padding-bottom: 0.5rem;
+      }
+      .categories-list {
+        display: inline-flex;
+        gap: 0.7rem;
+      }
+      .category-chip {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        padding: 0.4rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .category-chip i {
+        font-size: 0.7rem;
+        color: #3b82f6;
+      }
+      .category-chip.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+      }
+      .category-chip.active i {
+        color: white;
+      }
+      .category-chip:hover:not(.active) {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+      }
+
+      /* Stats */
+      .stats-info {
+        font-size: 0.85rem;
+        color: #475569;
+        margin: 0.5rem 0 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .view-toggle {
+        display: flex;
+        gap: 8px;
+      }
+      .view-icon {
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        transition: 0.2s;
+      }
+      .view-icon.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      /* Books Grid (Default grid) */
       .books-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.8rem;
+        margin-bottom: 2rem;
       }
+      /* List view */
+      .books-grid.list-view {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .books-grid.list-view .book-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem;
+      }
+      .books-grid.list-view .card-cover {
+        width: 80px;
+        aspect-ratio: 1/1;
+        margin: 0;
+      }
+      .books-grid.list-view .book-info {
+        flex: 1;
+      }
+      .books-grid.list-view .book-actions {
+        width: auto;
+        margin-top: 0;
+      }
+
       .book-card {
-        background: #07152f;
-        border-radius: 1rem;
+        background: white;
+        border-radius: 20px;
         overflow: hidden;
         transition:
-          transform 0.2s,
-          border-color 0.2s;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+          transform 0.25s,
+          box-shadow 0.25s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
       }
       .book-card:hover {
         transform: translateY(-5px);
-        border-color: #f4a261;
+        box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e1;
       }
       .card-cover {
-        aspect-ratio: 4/3;
-        background: #0a1a2f;
+        aspect-ratio: 3/4;
+        background: #f1f5f9;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .card-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+      .book-card:hover .card-cover img {
+        transform: scale(1.03);
       }
       .card-cover i {
-        font-size: 4rem;
-        color: #f4a261;
+        font-size: 3.5rem;
+        color: #94a3b8;
       }
       .book-info {
         padding: 1rem;
       }
       .book-title {
         font-weight: 700;
-        margin-bottom: 0.25rem;
+        font-size: 0.95rem;
+        line-height: 1.3;
+        margin-bottom: 4px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .book-author {
+        font-size: 0.7rem;
+        color: #64748b;
+        margin-bottom: 6px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .book-author {
-        font-size: 0.8rem;
-        color: #8e9cb0;
-        margin-bottom: 0.5rem;
+      .book-category {
+        display: inline-block;
+        background: #e2e8f0;
+        padding: 2px 10px;
+        border-radius: 30px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 10px;
       }
       .book-actions {
         display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
+        gap: 8px;
+        margin-top: 10px;
       }
-      .btn {
+      .book-actions a {
         flex: 1;
         text-align: center;
-        padding: 0.5rem;
-        border-radius: 2rem;
-        text-decoration: none;
-        font-size: 0.8rem;
+        padding: 6px 0;
+        border-radius: 30px;
+        font-size: 0.7rem;
         font-weight: 500;
+        text-decoration: none;
         transition: 0.2s;
-        display: inline-flex;
-        align-items: center;
+      }
+      .btn-read {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-read:hover {
+        background: #2563eb;
+      }
+      .btn-download {
+        background: #f1f5f9;
+        color: #1e293b;
+        border: 1px solid #cbd5e1;
+      }
+      .btn-download:hover {
+        background: #e2e8f0;
+      }
+
+      /* Pagination */
+      .pagination {
+        display: flex;
+        flex-wrap: wrap;
         justify-content: center;
-        gap: 6px;
+        gap: 0.5rem;
+        margin: 2rem 0 1rem;
       }
-      .btn-primary-btn {
-        background: #f4a261;
-        color: #020b1f;
+      .page-btn {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        padding: 0.4rem 0.9rem;
+        border-radius: 30px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8rem;
+        transition: 0.2s;
       }
-      .btn-primary-btn:hover {
-        background: #e76f51;
+      .page-btn.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
       }
-      .btn-outline {
-        border: 1px solid #f4a261;
-        color: #f4a261;
-        background: transparent;
+      .page-btn:hover:not(.active) {
+        background: #e2e8f0;
       }
-      .btn-outline:hover {
-        background: #f4a261;
-        color: #020b1f;
-      }
+
+      /* Loading & Error */
       .loading,
       .error {
         text-align: center;
-        margin-top: 2rem;
-        padding: 2rem;
-        background: #07152f;
-        border-radius: 1rem;
+        padding: 3rem;
+        background: white;
+        border-radius: 24px;
+        margin: 2rem 0;
       }
       .error {
-        color: #ff6b6b;
+        color: #dc2626;
       }
-      .footer-dua-kolom {
-        display: flex;
-        justify-content: space-between;
-        gap: 2rem;
+
+      /* Footer */
+      .footer {
         margin-top: 3rem;
-        background: #07152f;
-        border-radius: 20px;
-        padding: 1.5rem 2rem;
-        border-top: 1px solid rgba(244, 162, 97, 0.3);
-        flex-wrap: wrap;
-      }
-      .footer-left,
-      .footer-right {
-        flex: 1;
-      }
-      .footer-left p,
-      .footer-right p {
-        font-size: 0.75rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.4;
-      }
-      .footer-copyright {
+        padding: 1.5rem 0;
+        border-top: 1px solid #e2e8f0;
         text-align: center;
-        font-size: 0.7rem;
-        color: #5a6e8a;
-        margin-top: 1rem;
-        padding-top: 0.8rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.75rem;
+        color: #64748b;
       }
-      @media (max-width: 640px) {
+
+      /* Responsive */
+      @media (max-width: 768px) {
         .container {
           padding: 1rem;
         }
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
         .books-grid {
-          grid-template-columns: 1fr;
-        }
-        .search-bar {
-          flex-direction: column;
-        }
-        .btn-primary {
-          width: 100%;
-        }
-        .footer-dua-kolom {
-          flex-direction: column;
-          text-align: center;
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
           gap: 1rem;
+        }
+        .book-title {
+          font-size: 0.85rem;
+        }
+        .book-actions a {
+          font-size: 0.65rem;
+          padding: 5px 0;
+        }
+        .filter-select,
+        .btn-primary {
+          padding: 0 1rem;
+          height: 46px;
+        }
+      }
+      @media (max-width: 480px) {
+        .books-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .stats-info {
+          flex-direction: column;
+          align-items: flex-start;
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>
-        <i class="fas fa-book-open"></i> Perpustakaan Digital Desa Tambaksari
-      </h1>
-      <div class="search-bar">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">
+          <h1><i class="fas fa-book-open"></i> Perpustakaan Digital</h1>
+          <p>Desa Tambaksari, Karawang</p>
+        </div>
+        <a
+          href="https://3215092006.website.desa.id/"
+          class="back-link"
+          target="_blank"
+          ><i class="fas fa-arrow-left"></i> Kembali ke Beranda Desa</a
+        >
+      </div>
+
+      <!-- Search & Filter -->
+      <div class="search-filter-bar">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
           <input
@@ -239,192 +492,61 @@
             placeholder="Cari judul buku..."
           />
         </div>
-        <button class="btn-primary" id="searchBtn">
+        <select id="categorySelect" class="filter-select">
+          <option value="all">📚 Semua Kategori</option>
+        </select>
+        <button id="searchBtn" class="btn-primary">
           <i class="fas fa-search"></i> Cari
         </button>
       </div>
-      <div id="booksContainer" class="books-grid"></div>
-      <div id="loadingMessage" class="loading">
-        📚 Memuat data dari Google Drive...
+
+      <!-- Category Chips (untuk navigasi cepat) -->
+      <div class="categories-wrapper">
+        <div class="categories-list" id="categoriesList"></div>
       </div>
 
-      <div class="footer-dua-kolom">
-        <div class="footer-left">
-          <p>
-            <i class="fas fa-landmark"></i>
-            <strong>Perpustakaan Digital Desa Tambaksari</strong>
-          </p>
-          <p>
-            Membaca adalah jendela dunia. Koleksi gratis untuk warga desa dan
-            masyarakat umum.
-          </p>
-        </div>
-        <div class="footer-right">
-          <p>
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>Disclaimer:</strong>
-          </p>
-          <p>
-            📢 Perpustakaan Digital Desa Tambaksari hanya bertindak sebagai
-            pengelola tautan dan penyedia akses. Seluruh buku adalah milik
-            penciptanya. Konten digunakan untuk tujuan pembelajaran
-            nonkomersial.
-          </p>
+      <!-- Stats & View Toggle -->
+      <div class="stats-info">
+        <span id="bookCount">0 buku ditemukan</span>
+        <div class="view-toggle">
+          <span class="view-icon active" data-view="grid"
+            ><i class="fas fa-th"></i
+          ></span>
+          <span class="view-icon" data-view="list"
+            ><i class="fas fa-list"></i
+          ></span>
         </div>
       </div>
-      <div class="footer-copyright">
-        <i class="fas fa-copyright"></i> 2026 Pemerintah Desa Tambaksari | Semua
-        hak cipta dilindungi undang-undang
+
+      <!-- Books Container -->
+      <div id="booksContainer" class="books-grid"></div>
+      <div id="loadingMessage" class="loading">📚 Memuat koleksi buku...</div>
+      <div id="paginationContainer" class="pagination"></div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>
+          <i class="fas fa-copyright"></i> 2026 Perpustakaan Digital Desa
+          Tambaksari | Buku disimpan di Google Drive | Akses gratis untuk semua
+        </p>
       </div>
     </div>
 
     <script>
       // ================= KONFIGURASI =================
-      // GANTI DENGAN DATA MILIK BAPAK/IBU
-      const API_KEY = "AIzaSyDHw6lgfHgl4gpPh1JMXtrrrrTX9QUCuV8"; // <-- GANTI DENGAN API KEY ANDA
-      const ROOT_FOLDER_ID = "1qMGVgwfiTm2WlRWfiYiZGaBU5YXFI2f1"; // <-- GANTI DENGAN ID FOLDER UTAMA ANDA
+      const API_KEY = "AIzaSyDHw6lgfHgl4gpPh1JMXtrrrrTX9QUCuV8";
+      const ROOT_FOLDER_ID = "1qMGVgwfiTm2WlRWfiYiZGaBU5YXFI2f1";
       // ==============================================
 
-      let allBooks = [];
+      let allBooks = []; // { id, name, author, category, pdfUrl, downloadUrl, thumbnail }
+      let filteredBooks = [];
+      let currentPage = 1;
+      let itemsPerPage = 12;
+      let currentCategory = "all";
       let currentKeyword = "";
+      let currentView = "grid"; // grid or list
 
-      /**
-       * Fungsi rekursif untuk mendapatkan semua ID folder yang ada di dalam folder utama.
-       * Ini diperlukan agar kita bisa mencari file PDF di semua sub-folder.
-       */
-      async function getAllFolderIds(parentId) {
-        let folderIds = [parentId];
-        let pageToken = null;
-
-        try {
-          do {
-            let url = `https://www.googleapis.com/drive/v3/files?q='${parentId}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}&fields=nextPageToken,files(id)&pageSize=100`;
-            if (pageToken) url += `&pageToken=${pageToken}`;
-
-            const response = await fetch(url);
-            if (!response.ok) return folderIds;
-
-            const data = await response.json();
-            if (data.files && data.files.length > 0) {
-              for (const folder of data.files) {
-                folderIds.push(folder.id);
-                // Panggil rekursif untuk mencari sub-folder di dalam folder ini
-                const subFolders = await getAllFolderIds(folder.id);
-                folderIds.push(...subFolders);
-              }
-            }
-            pageToken = data.nextPageToken;
-          } while (pageToken);
-        } catch (error) {
-          console.error("Error scanning sub-folders:", error);
-        }
-
-        // Hapus ID yang duplikat untuk menghemat proses
-        return [...new Set(folderIds)];
-      }
-
-      /**
-       * Fungsi utama untuk mengambil semua file PDF dari folder utama beserta semua sub-foldernya.
-       */
-      async function fetchFilesFromDrive() {
-        try {
-          const loadingMsg = document.getElementById("loadingMessage");
-          loadingMsg.innerHTML =
-            "📂 Sedang memindai struktur folder dan mencari buku...";
-
-          // Step 1: Cari semua ID folder (termasuk sub-folder)
-          const allFolderIds = await getAllFolderIds(ROOT_FOLDER_ID);
-
-          loadingMsg.innerHTML = `📚 Ditemukan ${allFolderIds.length} folder. Sedang mengambil daftar buku...`;
-
-          // Step 2: Buat query untuk mencari file PDF di semua folder yang sudah ditemukan
-          let allFiles = [];
-          // Proses setiap folder satu per satu
-          for (const folderId of allFolderIds) {
-            let pageToken = null;
-            do {
-              let url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType='application/pdf'&key=${API_KEY}&fields=nextPageToken,files(id,name,mimeType,webContentLink)&pageSize=100`;
-              if (pageToken) url += `&pageToken=${pageToken}`;
-
-              const response = await fetch(url);
-              if (!response.ok) continue;
-
-              const data = await response.json();
-              if (data.files && data.files.length > 0) {
-                allFiles.push(...data.files);
-              }
-              pageToken = data.nextPageToken;
-            } while (pageToken);
-          }
-
-          // Hapus file duplikat jika ada (berdasarkan ID)
-          const uniqueFiles = [];
-          const fileIds = new Set();
-          for (const file of allFiles) {
-            if (!fileIds.has(file.id)) {
-              fileIds.add(file.id);
-              uniqueFiles.push(file);
-            }
-          }
-
-          if (uniqueFiles.length === 0) {
-            loadingMsg.innerHTML =
-              "📭 Belum ada file PDF di folder atau sub-folder ini. Silakan upload buku ke Google Drive.";
-            return;
-          }
-
-          // Format data untuk ditampilkan
-          allBooks = uniqueFiles.map((file) => ({
-            id: file.id,
-            name: file.name.replace(/\.pdf$/i, ""),
-            author: "Koleksi Desa Tambaksari",
-            url: `https://drive.google.com/file/d/${file.id}/preview`,
-            download:
-              file.webContentLink ||
-              `https://drive.google.com/uc?export=download&id=${file.id}`,
-          }));
-
-          displayBooks(allBooks);
-          loadingMsg.style.display = "none";
-        } catch (error) {
-          console.error("Error:", error);
-          document.getElementById("loadingMessage").innerHTML =
-            `<div class="error">⚠️ Gagal memuat data. Pastikan folder sudah dibagikan publik (Anyone with link can view).</div>`;
-        }
-      }
-
-      function displayBooks(books) {
-        const container = document.getElementById("booksContainer");
-        const loadingMsg = document.getElementById("loadingMessage");
-
-        if (books.length === 0) {
-          loadingMsg.innerHTML = "📭 Tidak ada buku ditemukan.";
-          container.innerHTML = "";
-          return;
-        }
-
-        loadingMsg.style.display = "none";
-        let html = "";
-        books.forEach((book) => {
-          html += `
-        <div class="book-card">
-          <div class="card-cover">
-            <i class="fas fa-file-pdf"></i>
-          </div>
-          <div class="book-info">
-            <div class="book-title">${escapeHtml(book.name)}</div>
-            <div class="book-author"><i class="fas fa-user"></i> ${escapeHtml(book.author)}</div>
-            <div class="book-actions">
-              <a href="${book.url}" class="btn btn-primary-btn" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open"></i> Baca</a>
-              <a href="${book.download}" class="btn btn-outline" target="_blank" rel="noopener noreferrer"><i class="fas fa-download"></i> Unduh</a>
-            </div>
-          </div>
-        </div>
-      `;
-        });
-        container.innerHTML = html;
-      }
-
+      // Helper: escape HTML
       function escapeHtml(str) {
         if (!str) return "";
         return str.replace(/[&<>]/g, function (m) {
@@ -435,35 +557,285 @@
         });
       }
 
-      function filterBooks() {
-        const searchTerm = currentKeyword.toLowerCase();
-        const filtered = allBooks.filter((book) =>
-          book.name.toLowerCase().includes(searchTerm),
-        );
-        displayBooks(filtered);
-        if (filtered.length === 0 && allBooks.length > 0) {
-          document.getElementById("loadingMessage").innerHTML =
-            "📭 Tidak ada buku yang cocok dengan pencarian.";
-          document.getElementById("loadingMessage").style.display = "block";
-        } else {
-          document.getElementById("loadingMessage").style.display = "none";
+      // Mendapatkan thumbnail dari Google Drive (ukuran sedang)
+      function getThumbnailUrl(fileId) {
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+      }
+
+      // Fungsi rekursif untuk mendapatkan semua folder ID (termasuk sub-folder)
+      async function getAllFolderIds(parentId, folderMap = new Map()) {
+        let folderIds = [parentId];
+        let pageToken = null;
+        try {
+          do {
+            let url = `https://www.googleapis.com/drive/v3/files?q='${parentId}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}&fields=nextPageToken,files(id,name)&pageSize=100`;
+            if (pageToken) url += `&pageToken=${pageToken}`;
+            const response = await fetch(url);
+            if (!response.ok) break;
+            const data = await response.json();
+            if (data.files && data.files.length) {
+              for (const folder of data.files) {
+                folderIds.push(folder.id);
+                folderMap.set(folder.id, folder.name);
+                const subFolders = await getAllFolderIds(folder.id, folderMap);
+                folderIds.push(...subFolders);
+              }
+            }
+            pageToken = data.nextPageToken;
+          } while (pageToken);
+        } catch (e) {
+          console.error(e);
+        }
+        return [...new Set(folderIds)];
+      }
+
+      // Mendapatkan semua file PDF dari semua folder (dengan mengetahui kategori dari nama folder terdekat)
+      async function fetchAllPdfs() {
+        const loadingMsg = document.getElementById("loadingMessage");
+        loadingMsg.innerHTML = "📂 Memindai struktur folder dan buku...";
+
+        // Dapatkan semua folder ID dan pemetaan nama folder
+        const folderMap = new Map();
+        const allFolderIds = await getAllFolderIds(ROOT_FOLDER_ID, folderMap);
+        // Tambahkan root folder dengan nama "Root"
+        folderMap.set(ROOT_FOLDER_ID, "Umum");
+
+        let allPdfFiles = [];
+        // Untuk setiap folder, ambil file PDF
+        for (const folderId of allFolderIds) {
+          let pageToken = null;
+          do {
+            let url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType='application/pdf'&key=${API_KEY}&fields=nextPageToken,files(id,name,webContentLink)&pageSize=100`;
+            if (pageToken) url += `&pageToken=${pageToken}`;
+            const response = await fetch(url);
+            if (!response.ok) continue;
+            const data = await response.json();
+            if (data.files && data.files.length) {
+              // Tentukan kategori: coba ambil dari nama folder terdekat, jika tidak ada gunakan "Umum"
+              let category = folderMap.get(folderId) || "Umum";
+              // Bersihkan nama kategori (hapus spacy berlebih)
+              category = category.trim();
+              if (category === "" || category === "Root") category = "Umum";
+              for (const file of data.files) {
+                allPdfFiles.push({
+                  id: file.id,
+                  name: file.name.replace(/\.pdf$/i, ""),
+                  category: category,
+                  downloadUrl:
+                    file.webContentLink ||
+                    `https://drive.google.com/uc?export=download&id=${file.id}`,
+                  previewUrl: `https://drive.google.com/file/d/${file.id}/preview`,
+                  thumbnail: getThumbnailUrl(file.id),
+                });
+              }
+            }
+            pageToken = data.nextPageToken;
+          } while (pageToken);
+        }
+
+        // Hapus duplikat berdasarkan ID
+        const unique = [];
+        const seen = new Set();
+        for (const book of allPdfFiles) {
+          if (!seen.has(book.id)) {
+            seen.add(book.id);
+            unique.push(book);
+          }
+        }
+        return unique;
+      }
+
+      // Render UI
+      function renderBooks() {
+        // Filter berdasarkan kategori dan keyword
+        let result = [...allBooks];
+        if (currentCategory !== "all") {
+          result = result.filter((b) => b.category === currentCategory);
+        }
+        if (currentKeyword.trim() !== "") {
+          const kw = currentKeyword.toLowerCase();
+          result = result.filter((b) => b.name.toLowerCase().includes(kw));
+        }
+        filteredBooks = result;
+
+        // Update statistik
+        document.getElementById("bookCount").innerText =
+          `${filteredBooks.length} buku ditemukan`;
+
+        // Pagination
+        const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        const start = (currentPage - 1) * itemsPerPage;
+        const pageBooks = filteredBooks.slice(start, start + itemsPerPage);
+
+        const container = document.getElementById("booksContainer");
+        const loadingMsg = document.getElementById("loadingMessage");
+        if (filteredBooks.length === 0) {
+          container.innerHTML = `<div style="text-align:center; padding:3rem; background:white; border-radius:1rem;">📭 Tidak ada buku yang sesuai.</div>`;
+          loadingMsg.style.display = "none";
+          document.getElementById("paginationContainer").innerHTML = "";
+          return;
+        }
+        loadingMsg.style.display = "none";
+
+        // Tampilkan grid atau list
+        let html = `<div class="books-grid ${currentView === "list" ? "list-view" : ""}">`;
+        for (const book of pageBooks) {
+          html += `
+        <div class="book-card">
+          <div class="card-cover">
+            <img src="${book.thumbnail}" alt="Cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-file-pdf\'></i>';">
+          </div>
+          <div class="book-info">
+            <div class="book-title">${escapeHtml(book.name)}</div>
+            <div class="book-author"><i class="fas fa-user"></i> Perpustakaan Desa</div>
+            <div class="book-category"><i class="fas fa-folder"></i> ${escapeHtml(book.category)}</div>
+            <div class="book-actions">
+              <a href="${book.previewUrl}" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-book-open"></i> Baca</a>
+              <a href="${book.downloadUrl}" class="btn-download" target="_blank" rel="noopener"><i class="fas fa-download"></i> Unduh</a>
+            </div>
+          </div>
+        </div>
+      `;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+
+        // Pagination buttons
+        renderPagination(totalPages);
+      }
+
+      function renderPagination(totalPages) {
+        const pContainer = document.getElementById("paginationContainer");
+        if (totalPages <= 1) {
+          pContainer.innerHTML = "";
+          return;
+        }
+        let html = "";
+        if (currentPage > 1)
+          html += `<button class="page-btn" data-page="${currentPage - 1}">‹ Sebelumnya</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === currentPage)
+            html += `<button class="page-btn active" data-page="${i}">${i}</button>`;
+          else if (
+            i === 1 ||
+            i === totalPages ||
+            (i >= currentPage - 1 && i <= currentPage + 1)
+          ) {
+            html += `<button class="page-btn" data-page="${i}">${i}</button>`;
+          } else if (i === currentPage - 2 || i === currentPage + 2) {
+            html += `<span style="padding:0 5px;">...</span>`;
+          }
+        }
+        if (currentPage < totalPages)
+          html += `<button class="page-btn" data-page="${currentPage + 1}">Selanjutnya ›</button>`;
+        pContainer.innerHTML = html;
+        document.querySelectorAll(".page-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const page = parseInt(btn.getAttribute("data-page"));
+            if (!isNaN(page) && page !== currentPage) {
+              currentPage = page;
+              renderBooks();
+              window.scrollTo({ top: 300, behavior: "smooth" });
+            }
+          });
+        });
+      }
+
+      // Membangun daftar kategori unik dan chips
+      function buildCategories() {
+        const categories = ["all", ...new Set(allBooks.map((b) => b.category))];
+        const select = document.getElementById("categorySelect");
+        select.innerHTML = "";
+        for (let cat of categories) {
+          const option = document.createElement("option");
+          option.value = cat === "all" ? "all" : cat;
+          option.textContent = cat === "all" ? "📚 Semua Kategori" : cat;
+          if (
+            currentCategory === cat ||
+            (cat === "all" && currentCategory === "all")
+          )
+            option.selected = true;
+          select.appendChild(option);
+        }
+        // Category chips
+        const chipsContainer = document.getElementById("categoriesList");
+        chipsContainer.innerHTML = "";
+        for (let cat of categories) {
+          const chip = document.createElement("div");
+          chip.className = `category-chip ${currentCategory === cat ? "active" : ""}`;
+          chip.setAttribute("data-category", cat);
+          chip.innerHTML = `<i class="fas fa-folder"></i> ${cat === "all" ? "Semua" : cat}`;
+          chip.addEventListener("click", () => {
+            currentCategory = cat;
+            currentPage = 1;
+            // Update select dan chips
+            document
+              .querySelectorAll(".category-chip")
+              .forEach((c) => c.classList.remove("active"));
+            chip.classList.add("active");
+            document.getElementById("categorySelect").value = cat;
+            renderBooks();
+          });
+          chipsContainer.appendChild(chip);
         }
       }
 
+      // Inisialisasi data dari Drive
+      async function init() {
+        try {
+          const books = await fetchAllPdfs();
+          if (!books.length) {
+            document.getElementById("loadingMessage").innerHTML =
+              "⚠️ Belum ada file PDF di folder. Silakan upload buku ke Google Drive.";
+            return;
+          }
+          allBooks = books;
+          buildCategories();
+          renderBooks();
+        } catch (err) {
+          console.error(err);
+          document.getElementById("loadingMessage").innerHTML =
+            '<div class="error">❌ Gagal memuat data. Periksa API Key dan izin folder publik.</div>';
+        }
+      }
+
+      // Event listeners
       document.addEventListener("DOMContentLoaded", () => {
-        fetchFilesFromDrive();
-        const searchBtn = document.getElementById("searchBtn");
+        init();
         const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const categorySelect = document.getElementById("categorySelect");
 
         searchBtn.addEventListener("click", () => {
           currentKeyword = searchInput.value;
-          filterBooks();
+          currentPage = 1;
+          renderBooks();
         });
         searchInput.addEventListener("keypress", (e) => {
-          if (e.key === "Enter") {
-            currentKeyword = searchInput.value;
-            filterBooks();
-          }
+          if (e.key === "Enter") searchBtn.click();
+        });
+        categorySelect.addEventListener("change", (e) => {
+          currentCategory = e.target.value;
+          currentPage = 1;
+          // Sync chips
+          document.querySelectorAll(".category-chip").forEach((chip) => {
+            if (chip.getAttribute("data-category") === currentCategory)
+              chip.classList.add("active");
+            else chip.classList.remove("active");
+          });
+          renderBooks();
+        });
+        // View toggle
+        const viewIcons = document.querySelectorAll(".view-icon");
+        viewIcons.forEach((icon) => {
+          icon.addEventListener("click", () => {
+            const view = icon.getAttribute("data-view");
+            currentView = view;
+            viewIcons.forEach((v) => v.classList.remove("active"));
+            icon.classList.add("active");
+            renderBooks();
+          });
         });
       });
     </script>
