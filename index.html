@@ -280,37 +280,101 @@
 
     <script>
       // ================= KONFIGURASI =================
-      const API_KEY = "AIzaSyDHw6lgfHgl4gpPh1JMXtrrrrTX9QUCuV8";
-      const FOLDER_ID = "1qMGVgwfiTm2WlRWfiYiZGaBU5YXFI2f1";
+      // GANTI DENGAN DATA MILIK BAPAK/IBU
+      const API_KEY = "AIzaSyDHw6lgfHgl4gpPh1JMXtrrrrTX9QUCuV8"; // <-- GANTI DENGAN API KEY ANDA
+      const ROOT_FOLDER_ID = "1qMGVgwfiTm2WlRWfiYiZGaBU5YXFI2f1"; // <-- GANTI DENGAN ID FOLDER UTAMA ANDA
       // ==============================================
 
       let allBooks = [];
       let currentKeyword = "";
 
-      async function fetchFilesFromDrive() {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webContentLink)&pageSize=1000`;
+      /**
+       * Fungsi rekursif untuk mendapatkan semua ID folder yang ada di dalam folder utama.
+       * Ini diperlukan agar kita bisa mencari file PDF di semua sub-folder.
+       */
+      async function getAllFolderIds(parentId) {
+        let folderIds = [parentId];
+        let pageToken = null;
 
         try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            const errorDetail = await response.text();
-            console.error("Error detail:", errorDetail);
-            throw new Error(
-              `Gagal mengambil data: ${response.status} ${response.statusText}`,
-            );
-          }
-          const data = await response.json();
-          const pdfFiles = data.files.filter(
-            (file) => file.mimeType === "application/pdf",
-          );
+          do {
+            let url = `https://www.googleapis.com/drive/v3/files?q='${parentId}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}&fields=nextPageToken,files(id)&pageSize=100`;
+            if (pageToken) url += `&pageToken=${pageToken}`;
 
-          if (pdfFiles.length === 0) {
-            document.getElementById("loadingMessage").innerHTML =
-              "📭 Belum ada file PDF di folder ini. Silakan upload buku ke Google Drive.";
+            const response = await fetch(url);
+            if (!response.ok) return folderIds;
+
+            const data = await response.json();
+            if (data.files && data.files.length > 0) {
+              for (const folder of data.files) {
+                folderIds.push(folder.id);
+                // Panggil rekursif untuk mencari sub-folder di dalam folder ini
+                const subFolders = await getAllFolderIds(folder.id);
+                folderIds.push(...subFolders);
+              }
+            }
+            pageToken = data.nextPageToken;
+          } while (pageToken);
+        } catch (error) {
+          console.error("Error scanning sub-folders:", error);
+        }
+
+        // Hapus ID yang duplikat untuk menghemat proses
+        return [...new Set(folderIds)];
+      }
+
+      /**
+       * Fungsi utama untuk mengambil semua file PDF dari folder utama beserta semua sub-foldernya.
+       */
+      async function fetchFilesFromDrive() {
+        try {
+          const loadingMsg = document.getElementById("loadingMessage");
+          loadingMsg.innerHTML =
+            "📂 Sedang memindai struktur folder dan mencari buku...";
+
+          // Step 1: Cari semua ID folder (termasuk sub-folder)
+          const allFolderIds = await getAllFolderIds(ROOT_FOLDER_ID);
+
+          loadingMsg.innerHTML = `📚 Ditemukan ${allFolderIds.length} folder. Sedang mengambil daftar buku...`;
+
+          // Step 2: Buat query untuk mencari file PDF di semua folder yang sudah ditemukan
+          let allFiles = [];
+          // Proses setiap folder satu per satu
+          for (const folderId of allFolderIds) {
+            let pageToken = null;
+            do {
+              let url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType='application/pdf'&key=${API_KEY}&fields=nextPageToken,files(id,name,mimeType,webContentLink)&pageSize=100`;
+              if (pageToken) url += `&pageToken=${pageToken}`;
+
+              const response = await fetch(url);
+              if (!response.ok) continue;
+
+              const data = await response.json();
+              if (data.files && data.files.length > 0) {
+                allFiles.push(...data.files);
+              }
+              pageToken = data.nextPageToken;
+            } while (pageToken);
+          }
+
+          // Hapus file duplikat jika ada (berdasarkan ID)
+          const uniqueFiles = [];
+          const fileIds = new Set();
+          for (const file of allFiles) {
+            if (!fileIds.has(file.id)) {
+              fileIds.add(file.id);
+              uniqueFiles.push(file);
+            }
+          }
+
+          if (uniqueFiles.length === 0) {
+            loadingMsg.innerHTML =
+              "📭 Belum ada file PDF di folder atau sub-folder ini. Silakan upload buku ke Google Drive.";
             return;
           }
 
-          allBooks = pdfFiles.map((file) => ({
+          // Format data untuk ditampilkan
+          allBooks = uniqueFiles.map((file) => ({
             id: file.id,
             name: file.name.replace(/\.pdf$/i, ""),
             author: "Koleksi Desa Tambaksari",
@@ -321,6 +385,7 @@
           }));
 
           displayBooks(allBooks);
+          loadingMsg.style.display = "none";
         } catch (error) {
           console.error("Error:", error);
           document.getElementById("loadingMessage").innerHTML =
