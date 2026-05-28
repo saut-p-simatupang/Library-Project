@@ -2,6 +2,9 @@
 
 > Website perpustakaan digital modern untuk desa – katalog buku online dari Google Drive dengan antarmuka seperti Netflix/Gramedia.
 
+🌐 Live Demo
+https://perpustakaan-desa-tambaksari.netlify.app
+
 ## ✨ Fitur Unggulan
 
 - 📖 **Koleksi Buku Otomatis** – Staf desa cukup upload PDF ke Google Drive, website langsung menampilkan.
@@ -32,3 +35,17 @@
 Atau Anda bisa langsung menggunakan versi live demo (ganti dengan URL Netlify Anda nanti).
 
 ## 📂 Struktur Folder Google Drive (Contoh)
+📁 Buku Perpustakaan (ID: 1qMGVgwfiTm...)
+├── 📁 PENDIDIKAN
+│   ├── matematika.pdf
+│   └── ipa.pdf
+├── 📁 NOVEL
+│   └── tenggelamnya-kapal-van-der-wijck.pdf
+├── 📁 BANK SOAL
+│   ├── soal-um-ugm-2016.pdf
+│   └── soal-um-ugm-2017.pdf
+├── 📁 UMUM
+│   └── peraturan-desa.pdf
+└── 📁 ANAK
+    └── dongeng-kancil.pdf
+
